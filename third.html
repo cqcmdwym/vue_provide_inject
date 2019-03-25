@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Provide inject</title>
+  <script src="http://unpkg.com/vue"></script>
+</head>
+<body>
+  <div id="el">
+    {{hello}} {{info}}
+    <button @click="info++">Press Me</button>
+    <child></child>
+  </div>
+  <script>
+    const Child = {
+      template: `<div>Hello From Child {{foo.info}}</div>`,
+      inject: ['foo']
+    }
+    new Vue({
+      el: '#el',
+      components: { Child },
+      provide () {
+        const foo = {}
+        Object.defineProperty(foo, 'info', {
+          enumerable: true,
+          get: () => this.info
+        })
+        return { foo }
+      },
+      data () {
+        return {
+          hello: 'Hello World!',
+          info: 123
+        }
+      }
+    })
+  </script>
+</body>
+</html>
